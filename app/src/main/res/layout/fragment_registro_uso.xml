@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#F4F6F9">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <!-- HEADER -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Registrar Entrada"
+                        android:textColor="#1E6BD6"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Registrar un nuevo uso de sala"
+                        android:textColor="#555555"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#EBEEF2"
+                    android:layout_marginBottom="24dp"/>
+
+                <!-- SECCIÓN TIPO DE USO -->
+                <LinearLayout
+                    android:id="@+id/layoutTipoUso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tipo de Uso"
+                        android:textColor="#212529"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp"/>
+
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/toggleGroupUso"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:checkedButton="@+id/btnUsoNormal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnUsoNormal"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Uso Normal"
+                            android:textAllCaps="false"
+                            android:textColor="#212529"
+                            app:icon="@drawable/portatil_18"
+                            app:iconTint="#212529"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnUsoExamen"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Examen"
+                            android:textAllCaps="false"
+                            android:textColor="#212529"
+                            app:icon="@android:drawable/ic_menu_edit"
+                            app:iconTint="#212529"/>
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
+                </LinearLayout>
+
+                <!-- LABORATORIO PRINCIPAL -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilLaboratorio"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Laboratorio"
+                    android:textColorHint="#757575"
+                    app:hintTextColor="#1E6BD6"
+                    app:startIconDrawable="@drawable/portatil_18"
+                    app:startIconTint="#1E6BD6"
+                    android:layout_marginBottom="16dp">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/etLaboratorioId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:textColor="#191716" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- LABORATORIO SECUNDARIO -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilLaboratorioSecundario"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Laboratorio Secundario (Sala Separada)"
+                    app:startIconDrawable="@drawable/portatil_18"
+                    app:startIconTint="#1E6BD6"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone"
+                    android:textColorHint="#000000"
+                    app:hintTextColor="#000000"
+                    app:boxBackgroundColor="#FFFFFF">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/etLaboratorioSecundarioId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:textColor="#000000"
+                        android:textColorHint="#000000"
+                        android:popupBackground="@color/white" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- NOTA EXAMEN -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardNotaExamen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardBackgroundColor="#E3F2FD"
+                    app:cardCornerRadius="8dp"
+                    app:strokeWidth="0dp"
+                    android:visibility="gone">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@android:drawable/ic_dialog_info"
+                            app:tint="#1565C0"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="Nota: En exámenes puedes usar dos laboratorios (salas) separadas. Selecciona ambos laboratorios."
+                            android:textColor="#1565C0"
+                            android:textSize="12sp"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- PROPOSITO -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilProposito"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Propósito"
+                    android:textColorHint="#757575"
+                    app:hintTextColor="#1E6BD6"
+                    app:startIconDrawable="@drawable/pluma_18"
+                    app:startIconTint="#1E6BD6"
+                    android:layout_marginBottom="16dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etProposito"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="#BDBDBD"
+                        android:textColor="#191716"
+                        android:inputType="textCapSentences" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- OBSERVACIONES -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilObservaciones"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Observaciones"
+                    android:textColorHint="#757575"
+                    app:hintTextColor="#1E6BD6"
+                    app:startIconDrawable="@drawable/comentario_18"
+                    app:startIconTint="#1E6BD6"
+                    android:layout_marginBottom="32dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etObservaciones"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="#BDBDBD"
+                        android:textColor="#191716"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"
+                        android:minLines="3" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- BOTONES DE ACCIÓN -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEntrada"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="Confirmar Entrada"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    app:cornerRadius="12dp"
+                    app:backgroundTint="#1E6BD6"
+                    android:visibility="visible"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSalida"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="Confirmar Salida"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    app:cornerRadius="12dp"
+                    app:backgroundTint="#2E7D32"
+                    android:visibility="gone"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCancelar"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Cancelar"
+                    android:textColor="#E74C3C"
+                    android:textAllCaps="false" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+</ScrollView>

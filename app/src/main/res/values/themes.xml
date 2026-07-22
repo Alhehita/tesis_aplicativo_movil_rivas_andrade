@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Actualizamos a Material3 para evitar crashes con los Chips y componentes modernos -->
+    <style name="Theme.TesisRivasAndrade" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorOnPrimary">@color/onPrimary</item>
+        <item name="colorPrimaryContainer">@color/primaryVariant</item>
+        <item name="colorOnPrimaryContainer">@color/onPrimary</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryContainer">@color/secondaryColor</item>
+        <item name="colorOnSecondaryContainer">@color/black</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+
+        <!-- Customize your theme here. -->
+    </style>
+
+    <!-- Estilo personalizado para Diálogos: Fondo Negro y Letras Blancas -->
+    <style name="DialogBlackWhite" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorSurface">@color/black</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorOnSurfaceVariant">@color/white</item>
+        <item name="colorPrimary">@color/white</item>
+    </style>
+</resources>

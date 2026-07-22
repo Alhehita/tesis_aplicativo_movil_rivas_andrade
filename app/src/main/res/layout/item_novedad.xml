@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- HEADER -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#1E6BD6"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp">
+
+            <!-- TÍTULO -->
+            <TextView
+                android:id="@+id/tvTitulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/containerAcciones"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="Pantalla rota" />
+
+            <!-- CONTENEDOR DE ACCIONES (Botón e Icono de Imagen) -->
+            <LinearLayout
+                android:id="@+id/containerAcciones"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- ICONO IMAGEN -->
+                <ImageView
+                    android:id="@+id/ivHasImage"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@android:drawable/ic_menu_gallery"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <!-- Botón Ver -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnVer"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:padding="0dp"
+                    app:icon="@drawable/ojo_18"
+                    app:iconTint="@android:color/white" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <!-- CUERPO DE LA TARJETA -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- DESCRIPCIÓN -->
+            <TextView
+                android:id="@+id/lblDescripcion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descripción"
+                android:textColor="#191716"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lblDescripcion"
+                android:layout_marginBottom="10dp"
+                android:textColor="#000814"
+                android:textSize="14sp"
+                tools:text="La pantalla del equipo 5 no enciende, posible falla..." />
+
+            <!-- CHIPS -->
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvDescripcion"
+                android:layout_marginBottom="12dp">
+
+                <!-- TIPO -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipTipo"
+                    style="@style/Widget.MaterialComponents.Chip.Action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#1565C0"
+                    android:textSize="11sp"
+                    app:chipBackgroundColor="#E3F2FD"
+                    app:chipIcon="@drawable/ordenador_18"
+                    app:chipIconTint="#1565C0"
+                    app:chipStrokeWidth="0dp"
+                    tools:text="EQUIPO" />
+
+                <!-- ESTADO -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipEstado"
+                    style="@style/Widget.MaterialComponents.Chip.Action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#EF6C00"
+                    android:textSize="11sp"
+                    app:chipBackgroundColor="#FFF3E0"
+                    app:chipIcon="@drawable/hora_18"
+                    app:chipIconTint="#EF6C00"
+                    app:chipStrokeWidth="0dp"
+                    tools:text="PENDIENTE" />
+
+                <!-- PRIORIDAD -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipPrioridad"
+                    style="@style/Widget.MaterialComponents.Chip.Action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#C62828"
+                    android:textSize="11sp"
+                    app:chipBackgroundColor="#FFEBEE"
+                    app:chipIcon="@android:drawable/stat_sys_warning"
+                    app:chipIconTint="#C62828"
+                    app:chipStrokeWidth="0dp"
+                    tools:text="ALTA" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- PIE DE PÁGINA (Laboratorio y Equipo alineados a la izquierda) -->
+            <LinearLayout
+                android:id="@+id/containerUbicacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/chipGroup"
+                android:layout_alignParentStart="true"
+                android:orientation="horizontal">
+
+                <!-- LABORATORIO -->
+                <TextView
+                    android:id="@+id/tvLaboratorio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#191716"
+                    android:textSize="12sp"
+                    android:textStyle="italic"
+                    tools:text="Laboratorio 1" />
+
+                <!-- EQUIPO -->
+                <TextView
+                    android:id="@+id/tvEquipo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:textColor="#1E6BD6"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:text=" • PC-03" />
+            </LinearLayout>
+
+            <!-- FECHA (Alineada a la derecha) -->
+            <TextView
+                android:id="@+id/tvFecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/chipGroup"
+                android:layout_alignParentEnd="true"
+                android:textColor="#191716"
+                android:textSize="11sp"
+                tools:text="10/03/2024 07:51" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

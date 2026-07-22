@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        tools:context=".ui.main.gestion_equipos.Gestion_Equipos">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- PAPELERA (solo admin) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="end"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPapelera"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Papelera"
+                    android:textColor="#E74C3C"
+                    android:visibility="gone"
+                    app:icon="@android:drawable/ic_menu_delete"
+                    app:iconTint="#E74C3C" />
+            </LinearLayout>
+
+            <!-- Encabezado -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="12dp">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_lab"
+                    app:tint="#1E6BD6" />
+
+                <TextView
+                    android:id="@+id/tvTitleEquipos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="Gestión de Equipos"
+                    android:textColor="#212529"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- SECCIÓN DE FILTROS -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="12dp"
+                android:gravity="center_vertical">
+
+                <!-- Filtro Laboratorio -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Laboratorio"
+                    android:textColorHint="@android:color/black"
+
+                    app:boxBackgroundColor="@android:color/white"
+                    app:boxStrokeColor="#D9D9D9"
+                    app:boxStrokeWidth="1dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:hintTextColor="#757575"
+
+                    app:startIconDrawable="@drawable/equipo_16"
+                    app:startIconTint="#1E6BD6">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/spinnerLaboratorioFiltro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:text="Todos"
+                        android:textColor="#212121"
+                        android:textSize="14sp"
+                        android:textColorHint="#757575"
+                        android:popupBackground="@android:color/white"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="16dp"
+                android:background="#DEE2E6" />
+
+            <!-- Listado de Equipos -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvGestionLaboratorios"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:clipToPadding="false"
+                android:paddingBottom="80dp"
+                tools:listitem="@layout/item_equipo_gestion" />
+
+        </LinearLayout>
+
+        <!-- Botón Agregar (Solo Admin) -->
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabAgregarEquipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Nuevo Equipo"
+            android:textColor="#FFFFFF"
+            android:visibility="gone"
+            app:backgroundTint="#1E6BD6"
+            app:icon="@android:drawable/ic_input_add"
+            app:iconTint="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- VISTA DE CARGA -->
+    <include
+        android:id="@+id/loadingLayout"
+        layout="@layout/loading_view" />
+
+</FrameLayout>

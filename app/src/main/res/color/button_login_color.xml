@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- deshabilitado -->
+    <item android:color="@color/buttonDisabled"
+        android:state_enabled="false"/>
+
+    <!-- habilitado -->
+    <item android:color="@color/buttonEnabled"/>
+
+</selector>

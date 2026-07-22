@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/adminFragment">
+
+    <!-- Dashboard Fragments (Role-based) -->
+    <fragment
+        android:id="@+id/adminFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.admin.AdminFragment"
+        android:label="Admin"
+        tools:layout="@layout/fragment_admin">
+        <action
+            android:id="@+id/action_adminFragment_to_gestionLaboratoriosFragment"
+            app:destination="@id/gestionLaboratoriosFragment" />
+        <action
+            android:id="@+id/action_adminFragment_to_gestionEquiposFragment"
+            app:destination="@id/gestionEquiposFragment" />
+        <action
+            android:id="@+id/action_adminFragment_to_novedadesFragment"
+            app:destination="@id/novedadesFragment" />
+        <action
+            android:id="@+id/action_adminFragment_to_registroUsoMenuFragment"
+            app:destination="@id/registroUsoMenuFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/directorCarreraFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.director_carrera.DirectorCarreraFragment"
+        android:label="Director Carrera"
+        tools:layout="@layout/fragment_director_carrera">
+        <action
+            android:id="@+id/action_directorCarreraFragment_to_gestionLaboratoriosFragment"
+            app:destination="@id/gestionLaboratoriosFragment" />
+        <action
+            android:id="@+id/action_directorCarreraFragment_to_gestionEquiposFragment"
+            app:destination="@id/gestionEquiposFragment" />
+        <action
+            android:id="@+id/action_directorCarreraFragment_to_novedadesFragment"
+            app:destination="@id/novedadesFragment" />
+        <action
+            android:id="@+id/action_directorCarreraFragment_to_registroUsoMenuFragment"
+            app:destination="@id/registroUsoMenuFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profesorFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.profesor.ProfesorFragment"
+        android:label="Profesor"
+        tools:layout="@layout/fragment_profesor">
+        <action
+            android:id="@+id/action_profesorFragment_to_gestionLaboratoriosFragment"
+            app:destination="@id/gestionLaboratoriosFragment" />
+        <action
+            android:id="@+id/action_profesorFragment_to_gestionEquiposFragment"
+            app:destination="@id/gestionEquiposFragment" />
+        <action
+            android:id="@+id/action_profesorFragment_to_novedadesFragment"
+            app:destination="@id/novedadesFragment" />
+        <action
+            android:id="@+id/action_profesorFragment_to_registroUsoMenuFragment"
+            app:destination="@id/registroUsoMenuFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/tecnicoFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.tecnico.TecnicoFragment"
+        android:label="Técnico"
+        tools:layout="@layout/fragment_tecnico">
+        <action
+            android:id="@+id/action_tecnicoFragment_to_gestionLaboratoriosFragment"
+            app:destination="@id/gestionLaboratoriosFragment" />
+        <action
+            android:id="@+id/action_tecnicoFragment_to_gestionEquiposFragment"
+            app:destination="@id/gestionEquiposFragment" />
+        <action
+            android:id="@+id/action_tecnicoFragment_to_novedadesFragment"
+            app:destination="@id/novedadesFragment">
+            <argument
+                android:name="soloMias"
+                android:defaultValue="true"
+                app:argType="boolean" />
+        </action>
+    </fragment>
+
+    <!-- Sub-fragments -->
+    <fragment
+        android:id="@+id/gestionLaboratoriosFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.gestion_laboratorios.Gestion_laboratorios"
+        android:label="Gestión Laboratorios"
+        tools:layout="@layout/fragment_gestion_laboratorios">
+        <action
+            android:id="@+id/action_gestionLaboratoriosFragment_to_editarLaboratorioFragment"
+            app:destination="@id/editarLaboratorioFragment" />
+        <action
+            android:id="@+id/action_gestionLaboratoriosFragment_to_detalleLaboratorioFragment"
+            app:destination="@id/detalleLaboratorioFragment" />
+        <action
+            android:id="@+id/action_gestionLaboratoriosFragment_to_papeleraFragment"
+            app:destination="@id/papeleraFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/gestionEquiposFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.gestion_equipos.Gestion_Equipos"
+        android:label="Gestión Equipos"
+        tools:layout="@layout/fragment_gestion__equipos">
+        <action
+            android:id="@+id/action_gestionEquiposFragment_to_editarEquipoFragment"
+            app:destination="@id/editarEquipoFragment" />
+        <action
+            android:id="@+id/action_gestionEquiposFragment_to_detalleEquipoFragment"
+            app:destination="@id/detalleEquipoFragment" />
+        <action
+            android:id="@+id/action_gestionEquiposFragment_to_papeleraFragment"
+            app:destination="@id/papeleraFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/novedadesFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.registro_novedades.NovedadesFragment"
+        android:label="Novedades"
+        tools:layout="@layout/fragment_novedades">
+        <argument
+            android:name="soloMias"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_novedadesFragment_to_reportarNovedadFragment"
+            app:destination="@id/reportarNovedadFragment" />
+        <action
+            android:id="@+id/action_novedadesFragment_to_detalleNovedadFragment"
+            app:destination="@id/detalleNovedadFragment">
+            <argument
+                android:name="novedadId"
+                app:argType="long" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/registroUsoMenuFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.registrouso.RegistroUsoMenuFragment"
+        android:label="Registro de Uso"
+        tools:layout="@layout/fragment_registrar_uso_menu">
+        <action
+            android:id="@+id/action_registroUsoMenuFragment_to_registroUsoFragment"
+            app:destination="@id/registroUsoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editarLaboratorioFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.gestion_laboratorios.EditarLaboratorioFragment"
+        android:label="Editar Laboratorio"
+        tools:layout="@layout/fragment_editar_laboratorio">
+        <argument
+            android:name="laboratorioId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detalleLaboratorioFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.gestion_laboratorios.DetalleLaboratorioFragment"
+        android:label="Detalle Laboratorio"
+        tools:layout="@layout/fragment_detalle_laboratorio">
+        <argument
+            android:name="laboratorioId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_detalleLaboratorioFragment_to_registroUsoFragment"
+            app:destination="@id/registroUsoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editarEquipoFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.gestion_equipos.EditarEquipoFragment"
+        android:label="Editar Equipo"
+        tools:layout="@layout/fragment_editar_equipo">
+        <argument
+            android:name="equipoId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detalleEquipoFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.gestion_equipos.DetalleEquipoFragment"
+        android:label="Detalle Equipo"
+        tools:layout="@layout/fragment_detalle_equipo">
+        <argument
+            android:name="equipoId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_detalleEquipoFragment_to_reportarNovedadFragment"
+            app:destination="@id/reportarNovedadFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/papeleraFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.gestion_laboratorios.PapeleraFragment"
+        android:label="Papelera"
+        tools:layout="@layout/fragment_papelera" />
+
+    <fragment
+        android:id="@+id/registroUsoFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.registrouso.RegistroUsoFragment"
+        android:label="Registro de Uso"
+        tools:layout="@layout/fragment_registro_uso">
+        <argument
+            android:name="isModoSalida"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <argument
+            android:name="laboratorioId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reportarNovedadFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.registro_novedades.ReportarNovedadFragment"
+        android:label="Reportar Novedad"
+        tools:layout="@layout/fragment_reportar_novedad">
+        <argument
+            android:name="equipoId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detalleNovedadFragment"
+        android:name="com.uce.tesisrivasandrade.ui.main.registro_novedades.DetalleNovedadFragment"
+        android:label="Detalle Novedad"
+        tools:layout="@layout/fragment_detalle_novedad">
+        <argument
+            android:name="novedadId"
+            app:argType="long" />
+    </fragment>
+
+</navigation>
