@@ -1,5 +1,6 @@
 package com.uce.tesisrivasandrade.ui.main.registro_novedades
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -21,7 +22,9 @@ import com.uce.tesisrivasandrade.utils.DateUtils
 import com.uce.tesisrivasandrade.utils.ImagePickerHelper
 import com.uce.tesisrivasandrade.utils.ImageUtils
 import com.uce.tesisrivasandrade.utils.configurarDropdown
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ReportarNovedadFragment : Fragment(R.layout.fragment_reportar_novedad) {
 
@@ -32,7 +35,7 @@ class ReportarNovedadFragment : Fragment(R.layout.fragment_reportar_novedad) {
         NovedadViewModelFactory(NovedadRepository(ApiClient.getNovedadService(requireContext())))
     }
 
-    private var base64Image: String? = null
+    private var selectedBitmap: Bitmap? = null
     private var listaLaboratorios: List<com.uce.tesisrivasandrade.data.model.registrouso.LaboratorioResponseDTO> = emptyList()
     private var listaEquipos: List<GestionEquiposResponse> = emptyList()
     private var equipoPreseleccionado: GestionEquiposResponse? = null
@@ -44,19 +47,15 @@ class ReportarNovedadFragment : Fragment(R.layout.fragment_reportar_novedad) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentReportarNovedadBinding.bind(view)
 
-        // Obtener equipoId de argumentos de navegación
         equipoId = arguments?.getLong("equipoId", -1L) ?: -1L
 
         imagePickerHelper = ImagePickerHelper(this) { bitmap ->
             binding.ivPreview.setImageBitmap(bitmap)
             binding.tvImageLabel.text = "Imagen seleccionada"
-            base64Image = ImageUtils.encodeImageToBase64(bitmap)
+            selectedBitmap = bitmap // Guardamos el bitmap, no lo procesamos aún
         }
 
-        // Si hay equipoId, cargar equipo preseleccionado
-        if (equipoId != -1L) {
-            cargarEquipoPreseleccionado()
-        }
+        if (equipoId != -1L) cargarEquipoPreseleccionado()
 
         setupDropdowns()
         setupListeners()
@@ -67,8 +66,7 @@ class ReportarNovedadFragment : Fragment(R.layout.fragment_reportar_novedad) {
     private fun cargarEquipoPreseleccionado() {
         lifecycleScope.launch {
             val repo = GestionEquiposRepository(requireContext())
-            val result = repo.obtenerEquipoPorId(equipoId)
-            result.onSuccess { equipo ->
+            repo.obtenerEquipoPorId(equipoId).onSuccess { equipo ->
                 equipoPreseleccionado = equipo
                 binding.etTitulo.setText("Novedad en equipo: ${equipo.codigo}")
                 binding.etLaboratorio.setText(equipo.laboratorioNombre, false)
@@ -83,7 +81,6 @@ class ReportarNovedadFragment : Fragment(R.layout.fragment_reportar_novedad) {
     private fun setupDropdowns() {
         val tipos = if (equipoPreseleccionado != null) listOf("EQUIPO") else listOf("GENERAL", "EQUIPO")
         configurarDropdown(requireContext(), binding.etTipo, tipos)
-
         if (equipoPreseleccionado == null) {
             binding.etTipo.setText("GENERAL", false)
             binding.tilEquipo.visibility = View.GONE
@@ -91,37 +88,8 @@ class ReportarNovedadFragment : Fragment(R.layout.fragment_reportar_novedad) {
 
         binding.etTipo.setOnItemClickListener { _, _, _, _ ->
             val seleccionado = binding.etTipo.text.toString()
-            if (seleccionado == "EQUIPO") {
-                binding.tilEquipo.visibility = View.VISIBLE
-                binding.tilEquipo.isEnabled = false
-                binding.etEquipo.setText("", false)
-                binding.etLaboratorio.setText("", false)
-                binding.etLaboratorio.isEnabled = true
-            } else {
-                binding.tilEquipo.visibility = View.GONE
-                binding.etLaboratorio.isEnabled = true
-                binding.etLaboratorio.setText("", false)
-            }
-        }
-
-        binding.etLaboratorio.setOnItemClickListener { _, _, _, _ ->
-            val seleccionado = binding.etTipo.text.toString()
-            val labNombre = binding.etLaboratorio.text.toString()
-            val lab = listaLaboratorios.find { it.nombre == labNombre }
-
-            if (seleccionado == "EQUIPO" && lab != null) {
-                val equiposFiltrados = listaEquipos.filter { it.laboratorioId == lab.id }
-                if (equiposFiltrados.isEmpty()) {
-                    Toast.makeText(requireContext(), "No hay equipos registrados en este laboratorio", Toast.LENGTH_SHORT).show()
-                    binding.etEquipo.setText("", false)
-                    binding.tilEquipo.isEnabled = false
-                } else {
-                    val nombresEquipos = equiposFiltrados.map { "${it.codigo} - ${it.tipo}" }
-                    configurarDropdown(requireContext(), binding.etEquipo, nombresEquipos)
-                    binding.etEquipo.setText("", false)
-                    binding.tilEquipo.isEnabled = true
-                }
-            }
+            binding.tilEquipo.visibility = if (seleccionado == "EQUIPO") View.VISIBLE else View.GONE
+            binding.etLaboratorio.isEnabled = true
         }
 
         val prioridades = listOf("BAJA", "MEDIA", "ALTA", "CRITICA")
@@ -134,45 +102,28 @@ class ReportarNovedadFragment : Fragment(R.layout.fragment_reportar_novedad) {
         binding.btnCancelar.setOnClickListener { findNavController().navigateUp() }
     }
 
-    private fun cargarDatosIniciales() {
-        viewModel.cargarLaboratorios(GestionLaboratorios(requireContext()))
-        viewModel.cargarEquipos(GestionEquiposRepository(requireContext()))
-    }
-
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.laboratorios.collect { laboratorios ->
-                        listaLaboratorios = laboratorios
-                        val nombres = laboratorios.map { it.nombre }
-                        configurarDropdown(requireContext(), binding.etLaboratorio, nombres)
-                        equipoPreseleccionado?.let { binding.etLaboratorio.setText(it.laboratorioNombre, false) }
+                viewModel.uiState.collect { state ->
+                    binding.loadingLayout.root.visibility = if (state.isLoading) View.VISIBLE else View.GONE
+                    if (state.successMessage != null) {
+                        Toast.makeText(requireContext(), state.successMessage, Toast.LENGTH_SHORT).show()
+                        findNavController().navigateUp()
+                        viewModel.clearMessages()
                     }
-                }
-
-                launch {
-                    viewModel.equipos.collect { equipos ->
-                        listaEquipos = equipos
-                    }
-                }
-
-                launch {
-                    viewModel.uiState.collect { state ->
-                        binding.loadingLayout.root.visibility = if (state.isLoading) View.VISIBLE else View.GONE
-                        if (state.successMessage != null) {
-                            Toast.makeText(requireContext(), state.successMessage, Toast.LENGTH_SHORT).show()
-                            findNavController().navigateUp()
-                            viewModel.clearMessages()
-                        }
-                        state.error?.let {
-                            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-                            viewModel.clearMessages()
-                        }
+                    state.error?.let {
+                        Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                        viewModel.clearMessages()
                     }
                 }
             }
         }
+    }
+
+    private fun cargarDatosIniciales() {
+        viewModel.cargarLaboratorios(GestionLaboratorios(requireContext()))
+        viewModel.cargarEquipos(GestionEquiposRepository(requireContext()))
     }
 
     private fun validarYGuardar() {
@@ -181,41 +132,39 @@ class ReportarNovedadFragment : Fragment(R.layout.fragment_reportar_novedad) {
         val labNombre = binding.etLaboratorio.text.toString()
         val prioridad = binding.etPrioridad.text.toString()
         val tipo = binding.etTipo.text.toString()
-        val equipoNombre = binding.etEquipo.text.toString()
 
         if (titulo.isBlank() || desc.isBlank() || labNombre.isBlank() || prioridad.isBlank()) {
-            Toast.makeText(context, "Por favor llena todos los campos obligatorios", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Llena los campos obligatorios", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val equipoIdEnvio = if (tipo == "EQUIPO") {
-            equipoPreseleccionado?.id ?: listaEquipos.find { "${it.codigo} - ${it.tipo}" == equipoNombre }?.id
-        } else null
-
-        if (tipo == "EQUIPO" && equipoIdEnvio == null) {
-            Toast.makeText(requireContext(), "Por favor, seleccione un equipo válido", Toast.LENGTH_SHORT).show()
+        val labId = listaLaboratorios.find { it.nombre == labNombre }?.id ?: equipoPreseleccionado?.laboratorioId
+        if (labId == null) {
+            Toast.makeText(requireContext(), "Laboratorio no válido", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val labId = listaLaboratorios.find { it.nombre == labNombre }?.id
-            ?: equipoPreseleccionado?.laboratorioId
-            ?: run {
-                Toast.makeText(requireContext(), "Error: Laboratorio no identificado", Toast.LENGTH_SHORT).show()
-                return
+        lifecycleScope.launch {
+            // Mostramos el cargando manualmente mientras procesamos la imagen
+            binding.loadingLayout.root.visibility = View.VISIBLE
+            
+            val base64 = withContext(Dispatchers.Default) {
+                selectedBitmap?.let { ImageUtils.encodeImageToBase64(it) }
             }
 
-        val request = RegistroNovedadesRequest(
-            titulo = titulo,
-            descripcion = desc,
-            tipo = tipo,
-            prioridad = prioridad,
-            laboratorioId = labId,
-            equipoId = equipoIdEnvio,
-            fechaReporte = DateUtils.getCurrentISODate(),
-            imagenes = base64Image?.let { listOf(it) } ?: emptyList()
-        )
+            val request = RegistroNovedadesRequest(
+                titulo = titulo,
+                descripcion = desc,
+                tipo = tipo,
+                prioridad = prioridad,
+                laboratorioId = labId,
+                equipoId = if (tipo == "EQUIPO") equipoPreseleccionado?.id else null,
+                fechaReporte = DateUtils.getCurrentISODate(),
+                imagenes = base64?.let { listOf(it) } ?: emptyList()
+            )
 
-        viewModel.reportarNovedad(request)
+            viewModel.reportarNovedad(request)
+        }
     }
 
     override fun onDestroyView() {

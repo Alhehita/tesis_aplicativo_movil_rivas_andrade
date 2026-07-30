@@ -36,20 +36,31 @@ class NovedadesViewModel(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
             try {
-                val response = if (soloMias) {
-                    repository.obtenerMisNovedades()
-                } else {
-                    repository.listarTodas()
-                }
-                
+                val response = if (soloMias) repository.obtenerMisNovedades() else repository.listarTodas()
                 if (response.isSuccessful) {
                     allNovedades = response.body() ?: emptyList()
                     aplicarFiltro()
                 } else {
-                    _uiState.value = _uiState.value.copy(isLoading = false, error = "Error: ${response.code()}")
+                    _uiState.value = _uiState.value.copy(isLoading = false, error = "Error al listar")
                 }
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(isLoading = false, error = e.message)
+            }
+        }
+    }
+
+    fun adjuntarImagen(novedadId: Long, imagenRequest: ImagenNovedadResponse) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+            try {
+                val response = repository.adjuntarImagen(novedadId, imagenRequest)
+                if (response.isSuccessful) {
+                    _uiState.value = _uiState.value.copy(isLoading = false, successMessage = "¡Imagen agregada!")
+                } else {
+                    _uiState.value = _uiState.value.copy(isLoading = false, error = "Error al subir imagen")
+                }
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(isLoading = false, error = "Error de conexión")
             }
         }
     }
@@ -60,13 +71,7 @@ class NovedadesViewModel(
     }
 
     private fun aplicarFiltro() {
-        val filtradas = if (currentFilter == null) {
-            allNovedades
-        } else {
-            allNovedades.filter { 
-                it.estado?.equals(currentFilter, ignoreCase = true) == true
-            }
-        }
+        val filtradas = if (currentFilter == null) allNovedades else allNovedades.filter { it.estado?.equals(currentFilter, ignoreCase = true) == true }
         _uiState.value = _uiState.value.copy(novedades = filtradas, isLoading = false)
     }
 
@@ -84,9 +89,8 @@ class NovedadesViewModel(
                         }
                     }
                     _uiState.value = _uiState.value.copy(isLoading = false, successMessage = "Novedad reportada con éxito")
-                    obtenerNovedades()
                 } else {
-                    _uiState.value = _uiState.value.copy(isLoading = false, error = "Error al reportar: ${response.code()}")
+                    _uiState.value = _uiState.value.copy(isLoading = false, error = "Error al reportar")
                 }
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(isLoading = false, error = e.message)
@@ -101,7 +105,6 @@ class NovedadesViewModel(
                 val response = repository.cambiarEstado(id, nuevoEstado, observaciones)
                 if (response.isSuccessful) {
                     _uiState.value = _uiState.value.copy(isLoading = false, successMessage = "Estado actualizado correctamente")
-                    obtenerNovedades()
                 }
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(isLoading = false, error = e.message)
@@ -117,9 +120,7 @@ class NovedadesViewModel(
 
     fun cargarEquipos(repoEquipos: GestionEquiposRepository) {
         viewModelScope.launch {
-            repoEquipos.obtenerEquiposActivos().onSuccess { 
-                _equipos.value = it 
-            }
+            repoEquipos.obtenerEquiposActivos().onSuccess { _equipos.value = it }
         }
     }
 
