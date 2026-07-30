@@ -18,8 +18,16 @@ class SessionManager(context: Context) {
         prefs.edit().putString("JWT_TOKEN", token).apply()
     }
 
+    fun saveRefreshToken(refreshToken: String) {
+        prefs.edit().putString("REFRESH_TOKEN", refreshToken).apply()
+    }
+
     fun fetchToken(): String? {
         return prefs.getString("JWT_TOKEN", null)
+    }
+
+    fun fetchRefreshToken(): String? {
+        return prefs.getString("REFRESH_TOKEN", null)
     }
 
     fun getRoles(): List<Rol> {

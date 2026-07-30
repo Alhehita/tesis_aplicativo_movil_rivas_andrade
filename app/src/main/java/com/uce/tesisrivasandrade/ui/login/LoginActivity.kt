@@ -64,6 +64,7 @@ class LoginActivity : AppCompatActivity() {
 
                     if (loginResult.error != null) {
                         showLoginFailed(loginResult.error)
+                        loading.visibility = View.GONE
                     }
 
                     if (loginResult.success != null) {
@@ -92,12 +93,14 @@ class LoginActivity : AppCompatActivity() {
 
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
-                    EditorInfo.IME_ACTION_DONE ->
+                    EditorInfo.IME_ACTION_DONE -> {
+                        loading.visibility = View.VISIBLE
                         loginViewModel.login(
                             this@LoginActivity,
                             username.text.toString(),
                             password.text.toString()
                         )
+                    }
                 }
                 false
             }
@@ -114,9 +117,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
-        val token = model.token
+        val sessionManager = SessionManager(this)
+        sessionManager.saveToken(model.token)
+        sessionManager.saveRefreshToken(model.refreshToken)
 
-        SessionManager(this).saveToken(token)
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }

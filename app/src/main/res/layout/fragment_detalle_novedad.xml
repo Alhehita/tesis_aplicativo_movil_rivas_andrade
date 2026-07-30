@@ -1,299 +1,309 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F4F6F9">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_height="match_parent"
+        android:background="#F4F6F9">
 
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:strokeWidth="0dp">
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="24dp"
-                android:background="#FFFFFF">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="24dp">
-                    <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/reporte_18"
-                        app:tint="#1E6BD6" />
-                    <TextView
-                        android:id="@+id/tvDetalleTitulo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:textSize="22sp"
-                        tools:text="Título de la Novedad"
-                        android:textColor="#1E6BD6"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="12dp"
-                    android:background="#EEEEEE" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="DESCRIPCIÓN"
-                    android:textAppearance="?attr/textAppearanceLabelMedium"
-                    android:textColor="#000000"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvDetalleDescripcion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="#212121"
-                    android:textAppearance="?attr/textAppearanceBodyLarge"
-                    tools:text="Esta es la descripción detallada de lo que sucedió..." />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ESTADO" android:textAppearance="?attr/textAppearanceLabelSmall" android:textColor="#000000" android:textStyle="bold" />
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipDetalleEstado"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="PENDIENTE"
-                            app:chipBackgroundColor="#515151"
-                            android:textColor="#FFFFFF"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRIORIDAD" android:textAppearance="?attr/textAppearanceLabelSmall" android:textColor="#000000" android:textStyle="bold" />
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipDetallePrioridad"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="ALTA"
-                            app:chipBackgroundColor="#515151"
-                            android:textColor="#FFFFFF"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- Laboratorio -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center_vertical">
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_lab"
-                        app:tint="#1E6BD6"/>
-                    <TextView
-                        android:id="@+id/tvDetalleLaboratorio"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:textColor="#000000"
-                        android:textAppearance="?attr/textAppearanceBodyMedium"
-                        tools:text="Laboratorio de Redes" />
-                </LinearLayout>
-
-                <!-- Fecha -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_vertical">
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/reloj_18"
-                        app:tint="#1E6BD6"/>
-                    <TextView
-                        android:id="@+id/tvDetalleFecha"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:textColor="#555555"
-                        android:textAppearance="?attr/textAppearanceBodySmall"
-                        tools:text="Reportado el 10/03/2024" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- GESTIÓN DE NOVEDAD (Solo ADMIN) -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardGestionNovedad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:strokeWidth="0dp"
-            android:visibility="gone">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="#FFFFFF">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#212529"
-                    android:padding="16dp"
-                    android:gravity="center_vertical">
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@android:drawable/ic_menu_manage"
-                        app:tint="#FFFFFF"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Gestión de Novedad"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-                </LinearLayout>
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="24dp">
+                    android:padding="24dp"
+                    android:background="#FFFFFF">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:hint="Nuevo Estado"
-                        android:textColorHint="#000000"
-                        app:hintTextColor="#000000"
-                        app:boxStrokeColor="#000000"
-                        app:boxBackgroundColor="#FFFFFF">
-                        <AutoCompleteTextView
-                            android:id="@+id/etNuevoEstado"
-                            android:layout_width="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="24dp">
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/reporte_18"
+                            app:tint="#1E6BD6" />
+                        <TextView
+                            android:id="@+id/tvDetalleTitulo"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:inputType="none"
+                            android:layout_marginStart="12dp"
+                            android:textSize="22sp"
+                            tools:text="Título de la Novedad"
+                            android:textColor="#1E6BD6"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="12dp"
+                        android:background="#EEEEEE" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DESCRIPCIÓN"
+                        android:textAppearance="?attr/textAppearanceLabelMedium"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvDetalleDescripcion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="#212121"
+                        android:textAppearance="?attr/textAppearanceBodyLarge"
+                        tools:text="Esta es la descripción detallada de lo que sucedió..." />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ESTADO" android:textAppearance="?attr/textAppearanceLabelSmall" android:textColor="#000000" android:textStyle="bold" />
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipDetalleEstado"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="PENDIENTE"
+                                app:chipBackgroundColor="#515151"
+                                android:textColor="#FFFFFF"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRIORIDAD" android:textAppearance="?attr/textAppearanceLabelSmall" android:textColor="#000000" android:textStyle="bold" />
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipDetallePrioridad"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="ALTA"
+                                app:chipBackgroundColor="#515151"
+                                android:textColor="#FFFFFF"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Laboratorio -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_lab"
+                            app:tint="#1E6BD6"/>
+                        <TextView
+                            android:id="@+id/tvDetalleLaboratorio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
                             android:textColor="#000000"
-                            android:popupBackground="@android:color/white"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:textAppearance="?attr/textAppearanceBodyMedium"
+                            tools:text="Laboratorio de Redes" />
+                    </LinearLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <!-- Fecha -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="24dp"
-                        android:hint="Observaciones de Resolución"
-                        android:textColorHint="#000000"
-                        app:hintTextColor="#000000"
-                        app:boxStrokeColor="#000000"
-                        app:boxBackgroundColor="#FFFFFF">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etObservacionesResolucion"
-                            android:layout_width="match_parent"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/reloj_18"
+                            app:tint="#1E6BD6"/>
+                        <TextView
+                            android:id="@+id/tvDetalleFecha"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="top"
-                            android:inputType="textMultiLine"
-                            android:minLines="3"
-                            android:textColor="#000000"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnActualizarEstado"
-                        android:layout_width="match_parent"
-                        android:layout_height="54dp"
-                        android:text="Actualizar Estado"
-                        android:textAllCaps="false"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:cornerRadius="8dp"
-                        app:backgroundTint="#1E6BD6"/>
+                            android:layout_marginStart="8dp"
+                            android:textColor="#555555"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            tools:text="Reportado el 10/03/2024" />
+                    </LinearLayout>
 
                 </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.card.MaterialCardView>
 
-        <!-- EVIDENCIAS FOTOGRÁFICAS -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="EVIDENCIAS FOTOGRÁFICAS"
-            android:textAppearance="?attr/textAppearanceTitleMedium"
-            android:textColor="#000000"
-            android:textStyle="bold" />
+            <!-- GESTIÓN DE NOVEDAD (Solo ADMIN) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardGestionNovedad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp"
+                android:visibility="gone">
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:scrollbars="none">
-            <LinearLayout
-                android:id="@+id/layoutImagenes"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#212529"
+                        android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@android:drawable/ic_menu_manage"
+                            app:tint="#FFFFFF"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="Gestión de Novedad"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:hint="Nuevo Estado"
+                            android:textColorHint="#000000"
+                            app:hintTextColor="#000000"
+                            app:boxStrokeColor="#000000"
+                            app:boxBackgroundColor="#FFFFFF">
+                            <AutoCompleteTextView
+                                android:id="@+id/etNuevoEstado"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"
+                                android:textColor="#000000"
+                                android:popupBackground="@android:color/white"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="24dp"
+                            android:hint="Observaciones de Resolución"
+                            android:textColorHint="#000000"
+                            app:hintTextColor="#000000"
+                            app:boxStrokeColor="#000000"
+                            app:boxBackgroundColor="#FFFFFF">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etObservacionesResolucion"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="top"
+                                android:inputType="textMultiLine"
+                                android:minLines="3"
+                                android:textColor="#000000"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnActualizarEstado"
+                            android:layout_width="match_parent"
+                            android:layout_height="54dp"
+                            android:text="Actualizar Estado"
+                            android:textAllCaps="false"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="8dp"
+                            app:backgroundTint="#1E6BD6"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- EVIDENCIAS FOTOGRÁFICAS -->
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="8dp"/>
-        </HorizontalScrollView>
+                android:layout_marginTop="24dp"
+                android:text="EVIDENCIAS FOTOGRÁFICAS"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textColor="#000000"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvNoImagenes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="No hay imágenes adjuntas"
-            android:textColor="#999999"
-            android:visibility="gone" />
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:id="@+id/layoutImagenes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="8dp"/>
+            </HorizontalScrollView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAgregarFoto"
-            style="@style/Widget.Material3.Button.TonalButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Agregar Nueva Foto"
-            app:icon="@android:drawable/ic_menu_camera" />
+            <TextView
+                android:id="@+id/tvNoImagenes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="No hay imágenes adjuntas"
+                android:textColor="#999999"
+                android:visibility="gone" />
 
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAgregarFoto"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Agregar Nueva Foto"
+                app:icon="@android:drawable/ic_menu_camera" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/loadingLayout"
+        layout="@layout/loading_view" />
+
+</FrameLayout>

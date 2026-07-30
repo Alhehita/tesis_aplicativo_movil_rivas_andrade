@@ -7,7 +7,8 @@ import androidx.core.content.ContextCompat
 import com.uce.tesisrivasandrade.R
 
 object Constants {
-    const val BASE_URL = "http://192.168.1.36:8080/"
+    const val BASE_URL = "http://10.34.225.74:8080/"
+    const val KEYCLOAK_BASE_URL = "https://fing-auth.ideasybits.com/auth/"
 }
 
 /**

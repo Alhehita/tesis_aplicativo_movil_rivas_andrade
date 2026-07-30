@@ -7,6 +7,7 @@ import com.uce.tesisrivasandrade.data.remote.Result
 import com.uce.tesisrivasandrade.R
 import com.uce.tesisrivasandrade.data.model.LoggedInUserView
 import com.uce.tesisrivasandrade.data.model.LoginResult
+import com.uce.tesisrivasandrade.data.model.TokenResponse
 import com.uce.tesisrivasandrade.data.repository.LoginRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,20 +22,16 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     val loginResult: StateFlow<LoginResult?> = _loginResult.asStateFlow()
 
     fun login(context: Context, username: String, password: String) {
-
         loginRepository.login(context, username, password) { result ->
-
-            if (result is Result.Success<*>) {
-
-                val token = (result as Result.Success).data.accessToken
-
+            if (result is Result.Success) {
+                val data = result.data as TokenResponse
                 _loginResult.value = LoginResult(
                     success = LoggedInUserView(
                         displayName = username,
-                        token = token
+                        token = data.accessToken,
+                        refreshToken = data.refreshToken
                     )
                 )
-
             } else {
                 _loginResult.value = LoginResult(error = R.string.login_failed)
             }

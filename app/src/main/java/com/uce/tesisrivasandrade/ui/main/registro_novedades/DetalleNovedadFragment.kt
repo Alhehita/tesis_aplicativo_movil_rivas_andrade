@@ -62,6 +62,7 @@ class DetalleNovedadFragment : Fragment(R.layout.fragment_detalle_novedad) {
     private fun cargarNovedadPorId(id: Long) {
         lifecycleScope.launch {
             try {
+                mostrarCargando(true)
                 val repo = NovedadRepository(ApiClient.getNovedadService(requireContext()))
                 val response = repo.obtenerPorId(id)
                 if (response.isSuccessful) {
@@ -75,6 +76,8 @@ class DetalleNovedadFragment : Fragment(R.layout.fragment_detalle_novedad) {
             } catch (e: Exception) {
                 Log.e(TAG, "Error al cargar novedad", e)
                 Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_SHORT).show()
+            } finally {
+                mostrarCargando(false)
             }
         }
     }
@@ -106,8 +109,6 @@ class DetalleNovedadFragment : Fragment(R.layout.fragment_detalle_novedad) {
         binding.btnAgregarFoto.setOnClickListener {
             imagePickerHelper.mostrarOpciones("Agregar Evidencia")
         }
-
-        // La navegación hacia atrás usa el botón del toolbar (setupActionBarWithNavController)
     }
 
     private fun setupGestionForm() {
@@ -134,6 +135,7 @@ class DetalleNovedadFragment : Fragment(R.layout.fragment_detalle_novedad) {
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState.collectLatest { state ->
+                mostrarCargando(state.isLoading)
                 if (state.successMessage != null) {
                     Toast.makeText(requireContext(), state.successMessage, Toast.LENGTH_SHORT).show()
                     viewModel.clearMessages()
@@ -203,15 +205,29 @@ class DetalleNovedadFragment : Fragment(R.layout.fragment_detalle_novedad) {
 
     private fun subirBitmapComoImagen(bitmap: android.graphics.Bitmap) {
         val n = novedad ?: return
+        mostrarCargando(true)
         val base64 = ImageUtils.encodeImageToBase64(bitmap)
         val imgRequest = ImagenNovedadResponse(0, "extra_${System.currentTimeMillis()}.jpg", "image/jpeg", base64)
         lifecycleScope.launch {
-            val repo = NovedadRepository(ApiClient.getNovedadService(requireContext()))
-            if (repo.adjuntarImagen(n.id, imgRequest).isSuccessful) {
-                Toast.makeText(requireContext(), "¡Imagen agregada!", Toast.LENGTH_SHORT).show()
-                recargarNovedad()
+            try {
+                val repo = NovedadRepository(ApiClient.getNovedadService(requireContext()))
+                val result = repo.adjuntarImagen(n.id, imgRequest)
+                if (result.isSuccessful) {
+                    Toast.makeText(requireContext(), "¡Imagen agregada!", Toast.LENGTH_SHORT).show()
+                    recargarNovedad()
+                } else {
+                    Toast.makeText(requireContext(), "Error al subir imagen", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Error de red al subir imagen", Toast.LENGTH_SHORT).show()
+            } finally {
+                mostrarCargando(false)
             }
         }
+    }
+
+    private fun mostrarCargando(show: Boolean) {
+        binding.loadingLayout.root.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {
