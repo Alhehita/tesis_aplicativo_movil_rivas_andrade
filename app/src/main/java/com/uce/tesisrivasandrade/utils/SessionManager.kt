@@ -14,6 +14,23 @@ class SessionManager(context: Context) {
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
+    fun saveServerUrl(url: String) {
+        var formattedUrl = url.trim()
+        if (formattedUrl.isNotEmpty()) {
+            if (!formattedUrl.startsWith("http")) {
+                formattedUrl = "http://$formattedUrl"
+            }
+            if (!formattedUrl.endsWith("/")) {
+                formattedUrl = "$formattedUrl/"
+            }
+            prefs.edit().putString("BASE_URL_DINAMICA", formattedUrl).apply()
+        }
+    }
+
+    fun fetchServerUrl(): String {
+        return prefs.getString("BASE_URL_DINAMICA", Constants.DEFAULT_BASE_URL) ?: Constants.DEFAULT_BASE_URL
+    }
+
     fun saveToken(token: String) {
         prefs.edit().putString("JWT_TOKEN", token).apply()
     }

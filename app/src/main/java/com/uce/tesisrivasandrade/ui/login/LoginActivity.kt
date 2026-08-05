@@ -3,18 +3,23 @@ package com.uce.tesisrivasandrade.ui.login
 import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.textfield.TextInputEditText
+import com.uce.tesisrivasandrade.R
 import com.uce.tesisrivasandrade.data.model.LoggedInUserView
+import com.uce.tesisrivasandrade.data.remote.ApiClient
 import com.uce.tesisrivasandrade.databinding.ActivityLoginBinding
 import com.uce.tesisrivasandrade.ui.main.MainActivity
 import com.uce.tesisrivasandrade.utils.SessionManager
@@ -25,6 +30,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,13 +38,21 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        sessionManager = SessionManager(this)
+
         val username = binding.username
         val password = binding.password
         val login = binding.login
         val loading = binding.loading
+        val btnSettings = binding.btnSettings
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
+
+        // Configurar botón de IP
+        btnSettings.setOnClickListener {
+            showIpConfigDialog()
+        }
 
         // Observar cambios del formulario con StateFlow
         lifecycleScope.launch {
@@ -116,8 +130,39 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun showIpConfigDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_config_ip, null)
+        val etIp = dialogView.findViewById<TextInputEditText>(R.id.et_ip_dinamica)
+        val btnGuardar = dialogView.findViewById<Button>(R.id.btn_guardar)
+        val btnCancelar = dialogView.findViewById<Button>(R.id.btn_cancelar)
+
+        etIp.setText(sessionManager.fetchServerUrl())
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+
+        // Hacer que el fondo del diálogo sea transparente para que se vea el blanco redondeado
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        btnCancelar.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnGuardar.setOnClickListener {
+            val newUrl = etIp.text.toString()
+            if (newUrl.isNotEmpty()) {
+                sessionManager.saveServerUrl(newUrl)
+                ApiClient.reiniciarConfiguracion()
+                Toast.makeText(this, "Servidor actualizado", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+        }
+
+        dialog.show()
+    }
+
     private fun updateUiWithUser(model: LoggedInUserView) {
-        val sessionManager = SessionManager(this)
         sessionManager.saveToken(model.token)
         sessionManager.saveRefreshToken(model.refreshToken)
 

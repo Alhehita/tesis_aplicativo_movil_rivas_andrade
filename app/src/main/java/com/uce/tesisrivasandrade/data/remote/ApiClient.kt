@@ -32,6 +32,7 @@ object ApiClient {
     fun getRetrofit(context: Context): Retrofit {
         if (retrofit == null) {
             val sessionManager = SessionManager(context)
+            val baseUrl = sessionManager.fetchServerUrl()
 
             val logging = HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
@@ -51,12 +52,10 @@ object ApiClient {
                 }
                 .authenticator(object : Authenticator {
                     override fun authenticate(route: Route?, response: Response): Request? {
-                        // Evitar bucles infinitos si el refresh falla repetidamente
                         if (response.countHeaders("Authorization-Refresh-Attempt") > 0) return null
 
                         val refreshToken = sessionManager.fetchRefreshToken() ?: return null
 
-                        // Llamada sincrónica a Keycloak para renovar el token
                         val keycloakApi = getKeycloakService()
                         val refreshResponse = keycloakApi.refreshToken(
                             refreshToken = refreshToken
@@ -68,7 +67,6 @@ object ApiClient {
                                 sessionManager.saveToken(newTokens.accessToken)
                                 sessionManager.saveRefreshToken(newTokens.refreshToken)
 
-                                // Reintentar con el nuevo token
                                 response.request.newBuilder()
                                     .header("Authorization", "Bearer ${newTokens.accessToken}")
                                     .addHeader("Authorization-Refresh-Attempt", "1")
@@ -83,7 +81,7 @@ object ApiClient {
                 .build()
 
             retrofit = Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()
@@ -91,7 +89,10 @@ object ApiClient {
         return retrofit!!
     }
 
-    // Instancia temporal de Retrofit para Keycloak
+    fun reiniciarConfiguracion() {
+        retrofit = null
+    }
+
     private fun getKeycloakService(): KeycloakApi {
         return Retrofit.Builder()
             .baseUrl(Constants.KEYCLOAK_BASE_URL)
