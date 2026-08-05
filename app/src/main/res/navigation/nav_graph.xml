@@ -151,7 +151,7 @@
     <fragment
         android:id="@+id/editarLaboratorioFragment"
         android:name="com.uce.tesisrivasandrade.ui.main.gestion_laboratorios.EditarLaboratorioFragment"
-        android:label="Editar Laboratorio"
+        android:label="Laboratorio"
         tools:layout="@layout/fragment_editar_laboratorio">
         <argument
             android:name="laboratorioId"

@@ -93,5 +93,29 @@ class EditarLaboratorioFragment : Fragment(R.layout.fragment_editar_laboratorio)
                 }
             }
         }
+        if (laboratorioId != -1L) {lifecycleScope.launch {
+            viewModel.laboratorios.collect { lista ->
+                val encontrado = lista.find { it.id == laboratorioId }
+                if (encontrado != null) {
+                    laboratorio = encontrado
+                    tvTitulo.text = "Editar Laboratorio"
+                    // AGREGAR ESTA LÍNEA para la barra azul:
+                    (requireActivity() as? androidx.appcompat.app.AppCompatActivity)?.supportActionBar?.title = "Editar Laboratorio"
+
+                    btnGuardar.text = "Guardar Cambios"
+                    etNombre.setText(encontrado.nombre)
+                    etUbicacion.setText(encontrado.ubicacion)
+                    etCapacidad.setText(encontrado.capacidad?.toString())
+                    return@collect
+                }
+            }
+        }
+        } else {
+            tvTitulo.text = "Agregar Nuevo Laboratorio"
+            // AGREGAR ESTA LÍNEA para la barra azul:
+            (requireActivity() as? androidx.appcompat.app.AppCompatActivity)?.supportActionBar?.title = "Agregar Laboratorio"
+
+            btnGuardar.text = "Crear Laboratorio"
+        }
     }
 }

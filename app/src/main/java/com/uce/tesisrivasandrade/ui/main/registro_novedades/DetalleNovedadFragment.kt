@@ -25,8 +25,10 @@ import com.uce.tesisrivasandrade.utils.DateUtils
 import com.uce.tesisrivasandrade.utils.ImagePickerHelper
 import com.uce.tesisrivasandrade.utils.ImageUtils
 import com.uce.tesisrivasandrade.utils.SessionManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DetalleNovedadFragment : Fragment(R.layout.fragment_detalle_novedad) {
 
@@ -96,7 +98,7 @@ class DetalleNovedadFragment : Fragment(R.layout.fragment_detalle_novedad) {
     private fun setupUI() {
         val sessionManager = SessionManager(requireContext())
         if (sessionManager.esAdmin()) {
-            binding.cardGestionNovedad.visibility = View.VISIBLE
+            _binding?.cardGestionNovedad?.visibility = View.VISIBLE
             setupGestionForm()
         }
         binding.btnAgregarFoto.setOnClickListener {
@@ -121,8 +123,7 @@ class DetalleNovedadFragment : Fragment(R.layout.fragment_detalle_novedad) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest { state ->
-                    // Esto asegura que si el ViewModel está cargando, se muestre el icono
-                    if (state.isLoading) mostrarCargando(true) else mostrarCargando(false)
+                    mostrarCargando(state.isLoading)
                     
                     if (state.successMessage != null) {
                         Toast.makeText(requireContext(), state.successMessage, Toast.LENGTH_SHORT).show()
@@ -140,16 +141,18 @@ class DetalleNovedadFragment : Fragment(R.layout.fragment_detalle_novedad) {
 
     private fun actualizarUI() {
         val n = novedad ?: return
-        binding.tvDetalleTitulo.text = n.titulo
-        binding.tvDetalleDescripcion.text = n.descripcion
-        binding.chipDetalleEstado.text = n.estado
-        binding.chipDetallePrioridad.text = n.prioridad
-        binding.tvDetalleLaboratorio.text = n.laboratorio?.nombre ?: n.laboratorioNombre ?: "Sin laboratorio"
-        binding.tvDetalleFecha.text = "Reportado el ${DateUtils.formatFechaISO(n.fechaReporte ?: "")}"
+        val b = _binding ?: return // Si el binding es nulo, no actualizamos nada
 
-        binding.layoutImagenes.removeAllViews()
+        b.tvDetalleTitulo.text = n.titulo
+        b.tvDetalleDescripcion.text = n.descripcion
+        b.chipDetalleEstado.text = n.estado
+        b.chipDetallePrioridad.text = n.prioridad
+        b.tvDetalleLaboratorio.text = n.laboratorio?.nombre ?: n.laboratorioNombre ?: "Sin laboratorio"
+        b.tvDetalleFecha.text = "Reportado el ${DateUtils.formatFechaISO(n.fechaReporte ?: "")}"
+
+        b.layoutImagenes.removeAllViews()
         val imagenes = n.imagenes ?: emptyList()
-        binding.tvNoImagenes.visibility = if (imagenes.isEmpty()) View.VISIBLE else View.GONE
+        b.tvNoImagenes.visibility = if (imagenes.isEmpty()) View.VISIBLE else View.GONE
         
         imagenes.forEach { img ->
             if (img.imagenBase64.isNullOrBlank()) return@forEach
@@ -166,7 +169,7 @@ class DetalleNovedadFragment : Fragment(R.layout.fragment_detalle_novedad) {
                     setImageResource(android.R.drawable.stat_notify_error)
                 }
             }
-            binding.layoutImagenes.addView(iv)
+            b.layoutImagenes.addView(iv)
         }
     }
 
@@ -183,35 +186,27 @@ class DetalleNovedadFragment : Fragment(R.layout.fragment_detalle_novedad) {
     private fun subirBitmapComoImagen(bitmap: android.graphics.Bitmap) {
         val n = novedad ?: return
         
-        // MOSTRAR CARGANDO INMEDIATAMENTE
         mostrarCargando(true)
         
         lifecycleScope.launch {
             try {
-                // El procesamiento (compresión) se hace en segundo plano
-                val base64 = ImageUtils.encodeImageToBase64(bitmap)
+                val base64 = withContext(Dispatchers.Default) {
+                    ImageUtils.encodeImageToBase64(bitmap)
+                }
                 val imgRequest = ImagenNovedadResponse(0, "extra_${System.currentTimeMillis()}.jpg", "image/jpeg", base64)
                 
-                val repo = NovedadRepository(ApiClient.getNovedadService(requireContext()))
-                val result = repo.adjuntarImagen(n.id, imgRequest)
-                
-                if (result.isSuccessful) {
-                    Toast.makeText(requireContext(), "¡Imagen agregada!", Toast.LENGTH_SHORT).show()
-                    recargarNovedad()
-                } else {
-                    Toast.makeText(requireContext(), "Error al subir imagen", Toast.LENGTH_SHORT).show()
-                    mostrarCargando(false)
-                }
+                viewModel.adjuntarImagen(n.id, imgRequest)
             } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Error de red", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "Error al subir imagen", e)
+                Toast.makeText(requireContext(), "Error al procesar la imagen", Toast.LENGTH_SHORT).show()
                 mostrarCargando(false)
             }
-            // El ocultar cargando se maneja en recargarNovedad -> cargarNovedadPorId o en los catches
         }
     }
 
     private fun mostrarCargando(show: Boolean) {
-        binding.loadingLayout.root.visibility = if (show) View.VISIBLE else View.GONE
+        // Usamos _binding de forma segura con ?. para evitar el NullPointerException
+        _binding?.loadingLayout?.root?.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {

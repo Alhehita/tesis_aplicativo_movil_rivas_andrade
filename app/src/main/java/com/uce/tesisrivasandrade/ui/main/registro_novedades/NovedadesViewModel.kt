@@ -23,14 +23,39 @@ class NovedadesViewModel(
 
     private val _uiState = MutableStateFlow(NovedadUiState())
     val uiState: StateFlow<NovedadUiState> = _uiState
+
+    private val _novedadDetalle = MutableStateFlow<RegistroNovedadesResponse?>(null)
+    val novedadDetalle: StateFlow<RegistroNovedadesResponse?> = _novedadDetalle
+
     private val _laboratorios = MutableStateFlow<List<LaboratorioResponseDTO>>(emptyList())
-    private val _equipos = MutableStateFlow<List<GestionEquiposResponse>>(emptyList())
-    private var allNovedades: List<RegistroNovedadesResponse> = emptyList()
-    
     val laboratorios: StateFlow<List<LaboratorioResponseDTO>> = _laboratorios
+    private val _equipos = MutableStateFlow<List<GestionEquiposResponse>>(emptyList())
     val equipos: StateFlow<List<GestionEquiposResponse>> = _equipos
     
+    private var allNovedades: List<RegistroNovedadesResponse> = emptyList()
     private var currentFilter: String? = null
+
+    fun cargarDetalleCompleto(id: Long) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+            try {
+                val respNovedad = repository.obtenerPorId(id)
+                if (respNovedad.isSuccessful) {
+                    var novedad = respNovedad.body()
+                    val respImagenes = repository.obtenerImagenes(id)
+                    if (respImagenes.isSuccessful) {
+                        novedad = novedad?.copy(imagenes = respImagenes.body())
+                    }
+                    _novedadDetalle.value = novedad
+                    _uiState.value = _uiState.value.copy(isLoading = false)
+                } else {
+                    _uiState.value = _uiState.value.copy(isLoading = false, error = "No se pudo cargar el detalle")
+                }
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(isLoading = false, error = "Error de red")
+            }
+        }
+    }
 
     fun obtenerNovedades(soloMias: Boolean = false) {
         viewModelScope.launch {
@@ -56,6 +81,7 @@ class NovedadesViewModel(
                 val response = repository.adjuntarImagen(novedadId, imagenRequest)
                 if (response.isSuccessful) {
                     _uiState.value = _uiState.value.copy(isLoading = false, successMessage = "¡Imagen agregada!")
+                    cargarDetalleCompleto(novedadId)
                 } else {
                     _uiState.value = _uiState.value.copy(isLoading = false, error = "Error al subir imagen")
                 }
@@ -105,6 +131,7 @@ class NovedadesViewModel(
                 val response = repository.cambiarEstado(id, nuevoEstado, observaciones)
                 if (response.isSuccessful) {
                     _uiState.value = _uiState.value.copy(isLoading = false, successMessage = "Estado actualizado correctamente")
+                    cargarDetalleCompleto(id)
                 }
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(isLoading = false, error = e.message)

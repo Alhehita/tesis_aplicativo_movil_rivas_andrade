@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -48,7 +49,7 @@ class EditarEquipoFragment : Fragment(R.layout.fragment_editar_equipo) {
         val btnGuardar = view.findViewById<MaterialButton>(R.id.btnGuardar)
         val btnCancelar = view.findViewById<MaterialButton>(R.id.btnCancelar)
 
-        // Forzar color negro para que no se vea gris
+        // Forzar color negro
         val colorNegro = ContextCompat.getColor(requireContext(), android.R.color.black)
         etCodigo.setTextColor(colorNegro)
         etTipo.setTextColor(colorNegro)
@@ -58,15 +59,17 @@ class EditarEquipoFragment : Fragment(R.layout.fragment_editar_equipo) {
         etSerie.setTextColor(colorNegro)
         etLaboratorio.setTextColor(colorNegro)
 
-        // Si editar, buscar equipo por ID en el ViewModel
+        // Lógica dinámica para Títulos (Barra Azul y Tarjeta)
         if (equipoId != -1L) {
+            (activity as? AppCompatActivity)?.supportActionBar?.title = "Editar Equipo"
+            tvTitulo?.text = "Editar Equipo"
+            btnGuardar.text = "Guardar Cambios"
+            
             lifecycleScope.launch {
                 viewModel.equipos.collect { lista ->
                     val encontrado = lista.find { it.id == equipoId }
                     if (encontrado != null) {
                         equipo = encontrado
-                        tvTitulo?.text = "Editar Equipo"
-                        btnGuardar.text = "Guardar Cambios"
                         etCodigo.setText(encontrado.codigo)
                         etTipo.setText(encontrado.tipo)
                         etEstado.setText(encontrado.estado.uppercase(), false)
@@ -75,11 +78,11 @@ class EditarEquipoFragment : Fragment(R.layout.fragment_editar_equipo) {
                         etSerie.setText(encontrado.numeroSerie)
                         etLaboratorio.setText(encontrado.laboratorioNombre ?: "Sin asignar", false)
                         selectedLaboratorioId = encontrado.laboratorioId
-                        return@collect
                     }
                 }
             }
         } else {
+            (activity as? AppCompatActivity)?.supportActionBar?.title = "Agregar Equipo"
             tvTitulo?.text = "Agregar Nuevo Equipo"
             btnGuardar.text = "Crear Equipo"
         }
@@ -128,15 +131,14 @@ class EditarEquipoFragment : Fragment(R.layout.fragment_editar_equipo) {
             }
         }
 
-        val actionCerrar = { findNavController().navigateUp() }
-        btnCancelar.setOnClickListener { actionCerrar() }
+        btnCancelar.setOnClickListener { findNavController().navigateUp() }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.mensaje.collect { mensaje ->
                 mensaje?.let {
                     Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                     if (it.contains("éxito") || it.contains("correctamente")) {
-                        actionCerrar()
+                        findNavController().navigateUp()
                         viewModel.clearMensaje()
                     }
                 }
